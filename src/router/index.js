@@ -19,6 +19,11 @@ const routes = [
     path: '/echarts',
     name: 'echarts-demo',
     component: () => import("../views/echarts/echarts.vue")
+  },
+  {
+    path: '/echarts-1',
+    name: 'echarts-demo-1',
+    component: () => import("../views/echarts/echarts-1.vue")
   }
 ];
 

@@ -2,6 +2,7 @@
   <div class="hello">
     <el-button @click="gotoPage('/websocket')">websocket示例</el-button>
     <el-button @click="gotoPage('/echarts')">Echarts示例</el-button>
+    <el-button @click="gotoPage('/echarts-1')">Echarts示例-1</el-button>
   </div>
 </template>
 
