@@ -15,6 +15,11 @@ const routes = [
     component: () =>
       import("../views/websocket/websocket-bro.vue"), 
   },
+  {
+    path: '/echarts',
+    name: 'echarts-demo',
+    component: () => import("../views/echarts/echarts.vue")
+  }
 ];
 
 const router = new VueRouter({
