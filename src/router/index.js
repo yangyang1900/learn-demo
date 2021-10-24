@@ -24,6 +24,16 @@ const routes = [
     path: '/echarts-1',
     name: 'echarts-demo-1',
     component: () => import("../views/echarts/echarts-1.vue")
+  },
+  {
+    path: '/axios',
+    name: 'axios',
+    component: () => import("../views/axios/index.vue")
+  },
+  {
+    path: '/menu',
+    name: 'menu',
+    component: () => import("../views/menu/index.vue")
   }
 ];
 
