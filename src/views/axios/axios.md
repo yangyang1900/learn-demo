@@ -242,6 +242,7 @@ instance.interceptors.request.use(config => {
 ```
 
 axios.get().then(res=>{})中的then相当于发送请求成功后的回调函数，而axios.get().catch(err=>{})相当于请求成功，对响应失败的处理，也就是reject的err会触发catch方法。
+
 ```
 axios.get()
     .then((res) => {
@@ -253,6 +254,8 @@ axios.get()
 ```
 
 请求错误和响应错误区别：请求错误表示请求没有到达后端，浏览器会报一些错误，比如请求接口没有，就会报404。例如：从数据库查询某一条记录，但是没有，后台返回一个状态码和错误信息，此时就是响应错误（请求到达后端，返回错误称为响应错误。没到达后端，成为请求错误）。
+
+一般来讲，40x是请求错误，50x是响应错误。
 
 **扩展**
 当在请求拦截器中，对headers的属性进行赋值时，通常使用config.headers.token='',而不是config.headers={token:‘’},因为第二种方式会把headers里的其他属性覆盖掉。
@@ -276,6 +279,17 @@ instance.interceptors.request.use(config => {
 let newInstance = axios.create({})
 ```
 
+取消拦截器
+```
+let interceptors = 
+    axios.interceptors.request.use
+    (config => {
+        return config
+    })
+axios.interceptors.request.eject(interceptors)
+```
+
+综合示例：
 ```
 <template>
   <div class="home">
@@ -293,18 +307,22 @@ export default {
     },err=>{
         return Promise.reject(err)
     })
+
     axios.interceptors.response.use(res=>{
         return res
     },err=>{
         return Promise.reject(err)
     })
+
     axios.get('/data.json').then((res)=>{
       console.log(res)
     }).catch(err=>{
         console.log(err)
     })
+
     // 例子：实际开发过程中，一般添加统一错误处理
     let instance = axios.create({})
+
     instance.interceptors.request(config=>{
         return config
     },err=>{
@@ -315,6 +333,7 @@ export default {
         },2000)
         return Promise.reject(err)
     })
+
     instance.interceptors.response.use(res=>{
         return res
     },err=>{
@@ -325,6 +344,7 @@ export default {
         },2000)
         return Promise.reject(err)
     })
+
     instance.get('/data.json').then(res=>{
         console.log(res)
     }).catch(err=>{
@@ -336,6 +356,31 @@ export default {
 ```
 
 ### 5.axios错误处理
+
+```
+//例子，实际开发中 一般添加统一的错误处理
+let instance = axios.create({})
+instance.interceptors.request.use(config=>{
+    return config
+},err=>{
+    //请求错误 一般http状态码开头，常见 401超时 404 not fonud
+    $('#modal').show()
+    setTimeout(()=>{
+        $('#modal').hide()
+    },2000)
+    return Promise.reject(err)  
+})
+instance.interceptors.response.use(res=>{
+    return res
+},err=>{
+    //响应错误处理 一般http开头的状态码以5开头， 500系统错误  502系统重启
+    $('#modal').show()
+    setTimeout(()=>{
+        $('#modal').hide()
+    },2000)
+    return Promise.reject(err)  
+})
+```
 
 
 ### 6.axios取消请求
