@@ -21,7 +21,26 @@
       </div>
       <div class="content-bottom-wrapper">销售趋势</div>
     </div>
-    <div class="footer"></div>
+    <div class="footer">
+      <div class="footer-wrapper">
+        <div class="left">
+          <div class="footer-title">订单销售额</div>
+          <div class="footer-sub-title">3月累计销售额</div>
+        </div>
+        <div class="right">
+          <small>$</small> 300,254.00
+        </div>
+      </div>
+      <div class="progress-wrapper">
+        <div class="progress-bg">
+          <div class="progress-current" :style="{ width: `${progress*100}%`}"></div>
+        </div>
+      </div>
+      <div class="footer-text">
+        <div class="footer-left">销售增长率</div>
+        <div class="footer-right">34%</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,14 +55,16 @@ export default {
       circle: new Array(3),
       selected: 0,
       viewWidth: 0,
-      viewHeight: 0 
+      viewHeight: 0,
+      progress: 0.35 
     }
   },
   mounted() {
-      //this.drawLine();
-      setInterval( () => {
+      this.drawLine();
+      this.task = setInterval( () => {
         //this.viewWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         //this.viewHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        //this.progress = Math.random(1, 100)
         let index = this.selected
         index ++
         if(index > this.circle.length) {
@@ -51,6 +72,11 @@ export default {
         }
         this.handleClick(index)
       }, 5000)
+  },
+  destroyed() {
+    if(this.task) {
+      clearInterval(this.task);
+    }
   },
   watch: {
     viewWidth(val, old) {
@@ -222,10 +248,111 @@ export default {
 }
 
 .footer{
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 120px;
   border-top: 1px solid #eeee;
   box-sizing: border-box;
+}
+
+.footer-wrapper {
+  display: flex;
+  padding: 14px 14px 0;
+}
+
+.left {
+
+}
+
+.footer-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+}
+
+.footer-sub-title {
+  font-size: 13px;
+  color: #999;
+}
+
+.right {
+  flex: 1;
+  text-align: right;
+  color: rgb(58, 196, 125);
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.small {
+  font-weight: 400;
+}
+
+.progress-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+}
+
+.progress-bg {
+  position: relative;
+  width: 100%;
+  height: 7px;
+  background: rgb(233, 236, 239);
+  border-radius: 3.5px;
+}
+
+.progress-current {
+  position: absolute;
+  left: 0;
+  top: 0;
+  /*width: 35%;*/
+  height: 7px;
+  background: #3f6ad8;
+  border-radius: 5.5px;
+}
+.progress-current::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+  opacity: 0;
+  animation: progress-active 5s ease infinite;
+}
+
+@keyframes progress-active {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 100%;
+    opacity: .3;
+  }
+}
+
+.footer-text {
+  display: flex;
+  /*justify-content: space-between;*/
+  padding: 0 14px 14px;
+  font-size: 13px;
+  color: #999;
+}
+
+.footer-left{
+
+}
+
+.footer-right {
+  /*flex: 1;
+  text-align: right;*/
+  margin-left: auto;
 }
 
 </style>
